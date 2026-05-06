@@ -1,0 +1,13 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Folder/">
+    <File Path=".clang-format" />
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Inventory/Inventory.vcxproj" Id="8ff69676-6eb7-4c53-9f83-f535aba118a3" />
+</Solution>

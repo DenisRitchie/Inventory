@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    "cxxopts",
+    "fmt",
+    "gtkmm",
+    "libharu",
+    "libpq",
+    "libpqxx",
+    "libxlsxwriter",
+    "nlohmann-json",
+    "refl-cpp",
+    "boost-program-options"
+  ]
+}
