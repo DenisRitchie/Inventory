@@ -6,6 +6,7 @@
   <Folder Name="/Folder/">
     <File Path=".clang-format" />
     <File Path=".gitignore" />
+    <File Path="Generate-GResource.ps1" />
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>

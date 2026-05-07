@@ -13,12 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{89dd2f2a-9996-4ecb-8248-b212b9372385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Images">
+      <UniqueIdentifier>{277b835b-911e-44b2-8718-8b22b40530b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Targetver.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Gtkmm.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Gtkmm-end.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,9 +53,20 @@
     <ClCompile Include="Main.ixx">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="SplashScreen.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseWindow.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
     <None Include="vcpkg-configuration.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Images\SplashScreen.png">
+      <Filter>Assets\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

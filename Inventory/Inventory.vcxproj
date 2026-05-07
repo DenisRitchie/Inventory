@@ -155,7 +155,6 @@
       </UndefinePreprocessorDefinitions>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <BuildStlModules>true</BuildStlModules>
-      <CompileAs>CompileAsCppModule</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,19 +163,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
+    <ClInclude Include="Gtkmm-end.hpp" />
+    <ClInclude Include="Gtkmm.hpp" />
     <ClInclude Include="Targetver.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.ixx" />
     <ClCompile Include="Helpers.ixx" />
     <ClCompile Include="Helpers.Win32.ixx" />
+    <ClCompile Include="BaseWindow.ixx" />
     <ClCompile Include="Main.ixx" />
     <ClCompile Include="Inventory.ixx" />
     <ClCompile Include="MainWindow.ixx" />
+    <ClCompile Include="SplashScreen.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Images\SplashScreen.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
