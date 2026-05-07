@@ -22,5 +22,9 @@
 #include <string_view>
 #include <algorithm>
 #include <vector>
+#include <span>
+#include <spanstream>
+#include <mdspan>
+#include <ranges>
 
 // Archivos de encabezado en tiempo de ejecución externos

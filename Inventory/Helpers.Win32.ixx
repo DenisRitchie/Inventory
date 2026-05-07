@@ -14,21 +14,15 @@ module;
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 export module Inventory:Win32;
 
 export namespace Inventory::Win32
 {
-    struct CommandLineArgs
-    {
-        int32_t                  Argc { };
-        std::vector<std::string> Storage;
-        std::vector<char*>       Argv;
-    };
-
-    std::string     WCharToUtf8(const std::wstring_view text) noexcept;
-    CommandLineArgs GetCommandLineArguments() noexcept;
-
+    std::string              WCharToUtf8(const std::wstring_view text) noexcept;
+    std::vector<std::string> GetCommandLineArguments() noexcept;
+    void                     CenterWindowOnScreen(HWND hwnd) noexcept;
 }   // namespace Inventory::Win32
 
 std::string Inventory::Win32::WCharToUtf8(const std::wstring_view text) noexcept
@@ -52,9 +46,9 @@ std::string Inventory::Win32::WCharToUtf8(const std::wstring_view text) noexcept
     return result;
 }
 
-Inventory::Win32::CommandLineArgs Inventory::Win32::GetCommandLineArguments() noexcept
+std::vector<std::string> Inventory::Win32::GetCommandLineArguments() noexcept
 {
-    CommandLineArgs result { };
+    std::vector<std::string> result { };
 
     int32_t wide_argc = 0;
     LPWSTR* wide_argv = CommandLineToArgvW(GetCommandLineW(), &wide_argc);
@@ -64,17 +58,59 @@ Inventory::Win32::CommandLineArgs Inventory::Win32::GetCommandLineArguments() no
         return result;
     }
 
-    result.Storage.reserve(wide_argc);
-    result.Argv.reserve(wide_argc);
+    result.reserve(wide_argc);
 
     for ( int32_t i = 0; i < wide_argc; ++i )
     {
-        auto& arg = result.Storage.emplace_back(WCharToUtf8(wide_argv[i]));
-        result.Argv.push_back(arg.data());
+        result.emplace_back(WCharToUtf8(wide_argv[i]));
     }
-
-    result.Argc = static_cast<int32_t>(result.Argv.size());
 
     LocalFree(wide_argv);
     return result;
+}
+
+void Inventory::Win32::CenterWindowOnScreen(HWND hwnd) noexcept
+{
+    if ( hwnd == nullptr || not IsWindow(hwnd) )
+    {
+        return;
+    }
+
+    RECT window_rect { };
+
+    if ( not GetWindowRect(hwnd, &window_rect) )
+    {
+        return;
+    }
+
+    const int32_t window_width  = window_rect.right - window_rect.left;
+    const int32_t window_height = window_rect.bottom - window_rect.top;
+
+    const HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+
+    if ( monitor == nullptr )
+    {
+        return;
+    }
+
+    //
+    // https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-monitorinfoexw
+    //
+    MONITORINFOEXW monitor_info { };
+    monitor_info.cbSize = sizeof(MONITORINFOEXW);
+
+    if ( not GetMonitorInfoW(monitor, reinterpret_cast<LPMONITORINFO>(&monitor_info)) )
+    {
+        return;
+    }
+
+    const RECT& work_area = monitor_info.rcWork;
+
+    const int32_t work_area_width  = work_area.right - work_area.left;
+    const int32_t work_area_height = work_area.bottom - work_area.top;
+
+    const int32_t x = work_area.left + ((work_area_width - window_width) / 2);
+    const int32_t y = work_area.top + ((work_area_height - window_height) / 2);
+
+    SetWindowPos(hwnd, nullptr, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 }

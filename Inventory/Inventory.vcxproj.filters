@@ -15,26 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="Framework.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Win32Safe.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="Targetver.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="Helpers.ixx">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -47,19 +35,12 @@
     <ClCompile Include="Inventory.ixx">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Inventory.rc">
-      <Filter>Archivos de recursos</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Archivos de recursos</Filter>
-    </Image>
-    <Image Include="Inventory.ico">
-      <Filter>Archivos de recursos</Filter>
-    </Image>
+    <ClCompile Include="Helpers.Win32.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
