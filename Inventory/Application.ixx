@@ -52,7 +52,7 @@ namespace Inventory
             m_Application->add_window(*m_SplashScreen);
             m_SplashScreen->present();
 
-            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::StartSplashFadeOut), 1800);
+            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::StartSplashFadeOut), 10000);
         }
 
         bool StartSplashFadeOut() noexcept
