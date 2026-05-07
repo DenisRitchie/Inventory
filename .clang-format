@@ -173,10 +173,10 @@ IndentWrappedFunctionNames: true
 InsertBraces: true
 InsertNewlineAtEOF: true
 InsertTrailingCommas: None # None, Wrapped
-IntegerLiteralSeparator:
-  Binary:  4
-  Hex:    -1
-  Decimal: 3
+IntegerLiteralSeparator: # https://releases.llvm.org/22.1.0/tools/clang/docs/ClangFormatStyleOptions.html#integerliteralseparator
+  Binary:  0
+  Hex:     0
+  Decimal: 0
 JavaImportGroups: [com.example, com, org]
 JavaScriptQuotes: Double # Leave, Single, Double
 JavaScriptWrapImports: true

@@ -9,5 +9,9 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Folder/.github/" />
+  <Folder Name="/Folder/.github/workflows/">
+    <File Path=".github/workflows/msbuild.yml" />
+  </Folder>
   <Project Path="Inventory/Inventory.vcxproj" Id="8ff69676-6eb7-4c53-9f83-f535aba118a3" />
 </Solution>

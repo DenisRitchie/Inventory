@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "targetver.h"
+#include "Targetver.hpp"
 #define WIN32_LEAN_AND_MEAN   // Excluir material rara vez utilizado de encabezados de Windows
 
 // Archivos de encabezado de Windows
@@ -21,5 +21,6 @@
 #include <string>
 #include <string_view>
 #include <algorithm>
+#include <vector>
 
 // Archivos de encabezado en tiempo de ejecución externos
