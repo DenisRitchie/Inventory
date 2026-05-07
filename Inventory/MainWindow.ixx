@@ -19,10 +19,13 @@ export namespace Inventory
 
         virtual void InitializeComponents() noexcept override
         {
+            SetCenterOnScreen(false);
             BaseWindow::InitializeComponents();
 
-            set_title("Inventory");
-            set_default_size(800, 500);
+            set_title("AcrossTec Inventory");
+            set_default_size(1000, 700);
+
+            maximize();
 
             m_Label.set_text("Hello, World!");
             set_child(m_Label);

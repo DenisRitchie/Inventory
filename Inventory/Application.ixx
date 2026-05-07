@@ -1,6 +1,7 @@
 module;
 
 #include "Gtkmm.hpp"
+#include "Resources/SplashScreen_gresource.h"
 
 #include <span>
 #include <spanstream>
@@ -116,13 +117,17 @@ namespace Inventory
         g_setenv("GTK_CSD", "0", true);
         g_setenv("GDK_BACKEND", "win32", true);
 
+        SplashScreen_gresource_register_resource();
+
         const auto            argv        = GetArgv(args);
         auto                  application = Gtk::Application::create("com.acrosstec.inventory");
         ApplicationController controller { application };
 
         application->signal_activate().connect(sigc::mem_fun(controller, &ApplicationController::OnActivate));
+        const auto result = application->run(static_cast<int32_t>(args.size()), argv.get());
 
-        return application->run(static_cast<int32_t>(args.size()), argv.get());
+        SplashScreen_gresource_unregister_resource();
+        return result;
     }
 }   // namespace Inventory
 

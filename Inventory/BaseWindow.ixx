@@ -19,7 +19,11 @@ namespace Inventory
         {
             set_decorated(true);
             set_default_size(800, 500);
-            signal_map().connect(sigc::mem_fun(*this, &BaseWindow::ScheduleCenterWindowOnScreen));
+
+            if ( m_CenterOnScreen )
+            {
+                signal_map().connect(sigc::mem_fun(*this, &BaseWindow::ScheduleCenterWindowOnScreen));
+            }
         }
 
         void CenterWindowOnScreen() noexcept
@@ -46,6 +50,12 @@ namespace Inventory
             Win32::CenterWindowOnScreen(gdk_win32_surface_get_handle(surface));
         }
 
+      protected:
+        void SetCenterOnScreen(const bool value) noexcept
+        {
+            m_CenterOnScreen = value;
+        }
+
       private:
         void ScheduleCenterWindowOnScreen() noexcept
         {
@@ -66,6 +76,7 @@ namespace Inventory
         }
 
       private:
+        bool m_CenterOnScreen { true };
         bool m_WasCentered { false };
     };
 }   // namespace Inventory

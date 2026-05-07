@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/acrosstec/inventory">
+    <file alias="SplashScreen.png">Assets/Images/SplashScreen.png</file>
+  </gresource>
+</gresources>

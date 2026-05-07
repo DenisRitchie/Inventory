@@ -73,6 +73,36 @@
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(ProjectDir)vcpkg_installed\x64-windows\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\gtkmm-4.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\gtkmm-4.0\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\gtk-4.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\glibmm-2.68;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\glibmm-2.68\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\giomm-2.68;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\giomm-2.68\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\pangomm-2.48;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\pangomm-2.48\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\cairomm-1.16;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\cairomm-1.16\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\sigc++-3.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\sigc++-3.0\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\glib-2.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\glib-2.0\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\gdk-pixbuf-2.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\pango-1.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\cairo;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\harfbuzz;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\graphene-1.0;
+        $(ProjectDir)vcpkg_installed\x64-windows\lib\graphene-1.0\include;
+        $(ProjectDir)vcpkg_installed\x64-windows\include\fribidi;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -110,32 +140,6 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <BuildStlModules>true</BuildStlModules>
-      <AdditionalIncludeDirectories>
-        $(ProjectDir)vcpkg_installed\x64-windows\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\gtkmm-4.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\gtkmm-4.0\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\gtk-4.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\glibmm-2.68;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\glibmm-2.68\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\giomm-2.68;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\giomm-2.68\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\pangomm-2.48;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\pangomm-2.48\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\cairomm-1.16;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\cairomm-1.16\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\sigc++-3.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\sigc++-3.0\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\glib-2.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\glib-2.0\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\gdk-pixbuf-2.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\pango-1.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\cairo;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\harfbuzz;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\graphene-1.0;
-        $(ProjectDir)vcpkg_installed\x64-windows\lib\graphene-1.0\include;
-        $(ProjectDir)vcpkg_installed\x64-windows\include\fribidi;
-        %(AdditionalIncludeDirectories)
-      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +169,7 @@
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Gtkmm-end.hpp" />
     <ClInclude Include="Gtkmm.hpp" />
+    <ClInclude Include="Resources\SplashScreen_gresource.h" />
     <ClInclude Include="Targetver.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +180,9 @@
     <ClCompile Include="Main.ixx" />
     <ClCompile Include="Inventory.ixx" />
     <ClCompile Include="MainWindow.ixx" />
+    <ClCompile Include="Resources\SplashScreen_gresource.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
     <ClCompile Include="SplashScreen.ixx" />
   </ItemGroup>
   <ItemGroup>
@@ -187,4 +195,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ItemGroup>
+    <SplashScreenAssets Include="$(ProjectDir)Assets\Images\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Resources\SplashScreen.gresource.xml" />
+  </ItemGroup>
+  <Target Name="CopySplashScreenAssets" AfterTargets="Build">
+    <Copy SourceFiles="@(SplashScreenAssets)" DestinationFiles="@(SplashScreenAssets->'$(TargetDir)Assets\Images\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

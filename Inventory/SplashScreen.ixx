@@ -12,54 +12,37 @@ export namespace Inventory
     {
       public:
         SplashScreen() noexcept
-          : m_Root(Gtk::Orientation::VERTICAL)
         {
             InitializeComponents();
         }
 
         virtual void InitializeComponents() noexcept override
         {
+            SetCenterOnScreen(true);
             BaseWindow::InitializeComponents();
 
-            set_title("Inventory");
+            set_title("AcrossTec Inventory");
             set_default_size(1000, 500);
+            set_size_request(1000, 500);
             set_decorated(false);
             set_resizable(false);
 
-            m_Root.set_margin_top(32);
-            m_Root.set_margin_bottom(32);
-            m_Root.set_margin_start(32);
-            m_Root.set_margin_end(32);
-            m_Root.set_spacing(16);
+            // Load from file:
+            // m_Background.set_filename("Assets/Images/SplashScreen.png");
+            // m_Background.set_size_request(1000, 500);
+            // m_Background.set_content_fit(Gtk::ContentFit::FILL);
 
-            m_Title.set_text("Inventory");
-            m_Title.add_css_class("title-1");
-            m_Title.set_halign(Gtk::Align::CENTER);
+            // Load from resource:
+            m_Background.set_resource("/com/acrosstec/inventory/SplashScreen.png");
+            m_Background.set_size_request(1000, 500);
+            m_Background.set_content_fit(Gtk::ContentFit::FILL);
+            m_Background.set_alternative_text("AcrossTec Inventory Splash Screen");
 
-            m_Subtitle.set_text("Inicializando sistema...");
-            m_Subtitle.add_css_class("dim-label");
-            m_Subtitle.set_halign(Gtk::Align::CENTER);
-
-            m_Spinner.set_halign(Gtk::Align::CENTER);
-            m_Spinner.start();
-
-            m_ProgressBar.set_pulse_step(0.15);
-            m_ProgressBar.pulse();
-
-            m_Root.append(m_Title);
-            m_Root.append(m_Subtitle);
-            m_Root.append(m_Spinner);
-            m_Root.append(m_ProgressBar);
-
-            set_child(m_Root);
+            set_child(m_Background);
         }
 
       private:
-        Gtk::Box         m_Root;
-        Gtk::Label       m_Title;
-        Gtk::Label       m_Subtitle;
-        Gtk::Spinner     m_Spinner;
-        Gtk::ProgressBar m_ProgressBar;
+        Gtk::Picture m_Background;
     };
 }   // namespace Inventory
 
