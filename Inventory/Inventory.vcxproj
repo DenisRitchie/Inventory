@@ -180,6 +180,7 @@
     <ClCompile Include="Main.ixx" />
     <ClCompile Include="Inventory.ixx" />
     <ClCompile Include="MainWindow.ixx" />
+    <ClCompile Include="LoginWindow.ixx" />
     <ClCompile Include="Resources\SplashScreen_gresource.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
     </ClCompile>

@@ -12,6 +12,7 @@ export module Inventory:Application;
 
 import :MainWindow;
 import :SplashScreen;
+import :LoginWindow;
 
 namespace Inventory
 {
@@ -52,7 +53,7 @@ namespace Inventory
             m_Application->add_window(*m_SplashScreen);
             m_SplashScreen->present();
 
-            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::StartSplashFadeOut), 10000);
+            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::StartSplashFadeOut), 1000);
         }
 
         bool StartSplashFadeOut() noexcept
@@ -74,8 +75,7 @@ namespace Inventory
             if ( m_SplashOpacity <= 0.0 )
             {
                 m_SplashScreen->set_opacity(0.0);
-                DestroySplashScreen();
-                ShowMainWindow();
+                ShowLoginWindow();
 
                 return false;
             }
@@ -97,6 +97,36 @@ namespace Inventory
             m_SplashScreen.reset();
         }
 
+        void DestroyLoginWindow() noexcept
+        {
+            if ( m_LoginWindow == nullptr )
+            {
+                return;
+            }
+
+            m_LoginWindow->hide();
+            m_Application->remove_window(*m_LoginWindow);
+            m_LoginWindow.reset();
+        }
+
+        bool ShowLoginWindow() noexcept
+        {
+            DestroySplashScreen();
+
+            m_LoginWindow = std::make_unique<LoginWindow>([this]() { OnLoginSuccess(); });
+
+            m_Application->add_window(*m_LoginWindow);
+            m_LoginWindow->present();
+
+            return false;
+        }
+
+        void OnLoginSuccess() noexcept
+        {
+            DestroyLoginWindow();
+            ShowMainWindow();
+        }
+
         void ShowMainWindow() noexcept
         {
             m_MainWindow = std::make_unique<MainWindow>();
@@ -108,6 +138,7 @@ namespace Inventory
       private:
         Glib::RefPtr<Gtk::Application> m_Application;
         std::unique_ptr<SplashScreen>  m_SplashScreen;
+        std::unique_ptr<LoginWindow>   m_LoginWindow;
         std::unique_ptr<MainWindow>    m_MainWindow;
         double_t                       m_SplashOpacity { 1.0 };
     };
