@@ -33,6 +33,12 @@
     <ClInclude Include="Gtkmm-end.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\Gtk\SplashScreen_gresource.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Win\Resource.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Helpers.ixx">
@@ -59,6 +65,12 @@
     <ClCompile Include="BaseWindow.ixx">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="LoginWindow.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Gtk\SplashScreen_gresource.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
@@ -68,5 +80,25 @@
     <Image Include="Assets\Images\SplashScreen.png">
       <Filter>Assets\Images</Filter>
     </Image>
+    <Image Include="Assets\Images\AcrossTec_AppIcon.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Assets\Images\AcrossTec_AppSmallIcon.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Assets\Images\AppIcon1.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Assets\Images\AppIcon2.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Win\AppIcon.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Resources\Gtk\SplashScreen.gresource.xml" />
   </ItemGroup>
 </Project>

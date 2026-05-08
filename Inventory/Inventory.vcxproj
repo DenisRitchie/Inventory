@@ -145,6 +145,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Resources\Win;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -164,12 +167,16 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Resources\Win;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Gtkmm-end.hpp" />
     <ClInclude Include="Gtkmm.hpp" />
-    <ClInclude Include="Resources\SplashScreen_gresource.h" />
+    <ClInclude Include="Resources\Gtk\SplashScreen_gresource.h" />
+    <ClInclude Include="Resources\Win\Resource.h" />
     <ClInclude Include="Targetver.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +188,7 @@
     <ClCompile Include="Inventory.ixx" />
     <ClCompile Include="MainWindow.ixx" />
     <ClCompile Include="LoginWindow.ixx" />
-    <ClCompile Include="Resources\SplashScreen_gresource.c">
+    <ClCompile Include="Resources\Gtk\SplashScreen_gresource.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="SplashScreen.ixx" />
@@ -191,6 +198,10 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\Images\AcrossTec_AppIcon.ico" />
+    <Image Include="Assets\Images\AcrossTec_AppSmallIcon.ico" />
+    <Image Include="Assets\Images\AppIcon1.png" />
+    <Image Include="Assets\Images\AppIcon2.png" />
     <Image Include="Assets\Images\SplashScreen.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -200,7 +211,10 @@
     <SplashScreenAssets Include="$(ProjectDir)Assets\Images\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\SplashScreen.gresource.xml" />
+    <Xml Include="Resources\Gtk\SplashScreen.gresource.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Win\AppIcon.rc" />
   </ItemGroup>
   <Target Name="CopySplashScreenAssets" AfterTargets="Build">
     <Copy SourceFiles="@(SplashScreenAssets)" DestinationFiles="@(SplashScreenAssets->'$(TargetDir)Assets\Images\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

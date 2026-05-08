@@ -1,7 +1,7 @@
 module;
 
 #include "Gtkmm.hpp"
-#include "Resources/SplashScreen_gresource.h"
+#include "Resources/Gtk/SplashScreen_gresource.h"
 
 #include <span>
 #include <spanstream>
