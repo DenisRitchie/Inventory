@@ -9,10 +9,10 @@ import :Helpers;
 
 namespace Inventory
 {
-    class BaseWindow : public Gtk::Window
+    class BaseWindow : public Gtk::ApplicationWindow
     {
       public:
-        using Gtk::Window::Window;
+        using Gtk::ApplicationWindow::ApplicationWindow;
 
         BaseWindow() noexcept = default;
 

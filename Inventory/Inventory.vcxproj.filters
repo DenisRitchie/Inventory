@@ -99,6 +99,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\Gtk\SplashScreen.gresource.xml" />
+    <Xml Include="Resources\Gtk\SplashScreen.gresource.xml">
+      <Filter>Archivos de recursos</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

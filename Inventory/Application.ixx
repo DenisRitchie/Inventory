@@ -29,44 +29,90 @@ namespace Inventory
         return result;
     }
 
-    class ApplicationController
+    class Application final : public Gtk::Application
     {
-      public:
-        explicit ApplicationController(const Glib::RefPtr<Gtk::Application>& application) noexcept
-          : m_Application(application)
+      protected:
+        Application()
+          : Gtk::Application("com.acrosstec.inventory")
         {
         }
 
-        void OnActivate() noexcept
+        void on_startup() override
         {
+            Gtk::Application::on_startup();
+            RegisterResources();
+        }
+
+        void on_activate() override
+        {
+            Gtk::Application::on_activate();
             ShowSplashScreen();
         }
 
+      public:
+        static Glib::RefPtr<Application> Create() noexcept
+        {
+            return Glib::make_refptr_for_instance<Application>(new Application());
+        }
+
+        virtual ~Application() noexcept override
+        {
+            UnregisterResources();
+        }
+
       private:
+        void RegisterResources() noexcept
+        {
+            if ( m_ResourcesRegistered )
+            {
+                return;
+            }
+
+            SplashScreen_gresource_register_resource();
+            m_ResourcesRegistered = true;
+        }
+
+        void UnregisterResources() noexcept
+        {
+            if ( not m_ResourcesRegistered )
+            {
+                return;
+            }
+
+            SplashScreen_gresource_unregister_resource();
+            m_ResourcesRegistered = false;
+        }
+
         void ShowSplashScreen() noexcept
         {
+            if ( m_SplashScreen != nullptr )
+            {
+                m_SplashScreen->present();
+                return;
+            }
+
             m_SplashScreen = std::make_unique<SplashScreen>();
 
             m_SplashOpacity = 1.0;
             m_SplashScreen->set_opacity(m_SplashOpacity);
 
-            m_Application->add_window(*m_SplashScreen);
+            add_window(*m_SplashScreen);
             m_SplashScreen->present();
 
-            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::StartSplashFadeOut), 1000);
+            Glib::signal_timeout().connect(sigc::mem_fun(*this, &Application::StartSplashFadeOut), 1000);
         }
 
         bool StartSplashFadeOut() noexcept
         {
-            Glib::signal_timeout().connect(sigc::mem_fun(*this, &ApplicationController::AnimateSplashFadeOut), 16);
-
-            return false;
+            Glib::signal_timeout().connect(sigc::mem_fun(*this, &Application::AnimateSplashFadeOut), 16);
+            return false;   // Stop this timeout, as the next one will handle the animation
         }
 
         bool AnimateSplashFadeOut() noexcept
         {
             if ( m_SplashScreen == nullptr )
             {
+                // This should not happen, but if it does, stop the animation and show the login window
                 return false;
             }
 
@@ -77,12 +123,48 @@ namespace Inventory
                 m_SplashScreen->set_opacity(0.0);
                 ShowLoginWindow();
 
-                return false;
+                return false;   // Stop this timeout, as the animation is complete and the login window is now shown
             }
 
             m_SplashScreen->set_opacity(m_SplashOpacity);
+            return true;   // Continue on the next timeout, as the animation is not yet complete
+        }
 
-            return true;
+        void ShowLoginWindow() noexcept
+        {
+            DestroySplashScreen();
+
+            if ( m_LoginWindow != nullptr )
+            {
+                m_LoginWindow->present();
+                return;
+            }
+
+            m_LoginWindow = std::make_unique<LoginWindow>();
+            m_LoginWindow->signal_login_success().connect(sigc::mem_fun(*this, &Application::OnLoginSuccess));
+
+            add_window(*m_LoginWindow);
+            m_LoginWindow->present();
+        }
+
+        void OnLoginSuccess() noexcept
+        {
+            DestroyLoginWindow();
+            ShowMainWindow();
+        }
+
+        void ShowMainWindow() noexcept
+        {
+            if ( m_MainWindow != nullptr )
+            {
+                m_MainWindow->present();
+                return;
+            }
+
+            m_MainWindow = std::make_unique<MainWindow>();
+
+            add_window(*m_MainWindow);
+            m_MainWindow->present();
         }
 
         void DestroySplashScreen() noexcept
@@ -93,7 +175,7 @@ namespace Inventory
             }
 
             m_SplashScreen->hide();
-            m_Application->remove_window(*m_SplashScreen);
+            remove_window(*m_SplashScreen);
             m_SplashScreen.reset();
         }
 
@@ -105,42 +187,17 @@ namespace Inventory
             }
 
             m_LoginWindow->hide();
-            m_Application->remove_window(*m_LoginWindow);
+            remove_window(*m_LoginWindow);
             m_LoginWindow.reset();
         }
 
-        bool ShowLoginWindow() noexcept
-        {
-            DestroySplashScreen();
-
-            m_LoginWindow = std::make_unique<LoginWindow>([this]() { OnLoginSuccess(); });
-
-            m_Application->add_window(*m_LoginWindow);
-            m_LoginWindow->present();
-
-            return false;
-        }
-
-        void OnLoginSuccess() noexcept
-        {
-            DestroyLoginWindow();
-            ShowMainWindow();
-        }
-
-        void ShowMainWindow() noexcept
-        {
-            m_MainWindow = std::make_unique<MainWindow>();
-
-            m_Application->add_window(*m_MainWindow);
-            m_MainWindow->present();
-        }
-
       private:
-        Glib::RefPtr<Gtk::Application> m_Application;
-        std::unique_ptr<SplashScreen>  m_SplashScreen;
-        std::unique_ptr<LoginWindow>   m_LoginWindow;
-        std::unique_ptr<MainWindow>    m_MainWindow;
-        double_t                       m_SplashOpacity { 1.0 };
+        std::unique_ptr<SplashScreen> m_SplashScreen;
+        std::unique_ptr<LoginWindow>  m_LoginWindow;
+        std::unique_ptr<MainWindow>   m_MainWindow;
+
+        double_t m_SplashOpacity { 1.0 };
+        bool     m_ResourcesRegistered { false };
     };
 
     export int32_t Main(const std::span<std::string> args) noexcept
@@ -148,17 +205,10 @@ namespace Inventory
         g_setenv("GTK_CSD", "0", true);
         g_setenv("GDK_BACKEND", "win32", true);
 
-        SplashScreen_gresource_register_resource();
+        const auto argv = GetArgv(args);
 
-        const auto            argv        = GetArgv(args);
-        auto                  application = Gtk::Application::create("com.acrosstec.inventory");
-        ApplicationController controller { application };
-
-        application->signal_activate().connect(sigc::mem_fun(controller, &ApplicationController::OnActivate));
-        const auto result = application->run(static_cast<int32_t>(args.size()), argv.get());
-
-        SplashScreen_gresource_unregister_resource();
-        return result;
+        auto application = Application::Create();
+        return application->run(static_cast<int32_t>(args.size()), argv.get());
     }
 }   // namespace Inventory
 

@@ -1,8 +1,6 @@
 module;
 
 #include "Gtkmm.hpp"
-
-#include <functional>
 #include <memory>
 
 export module Inventory:LoginWindow;
@@ -13,14 +11,21 @@ export namespace Inventory
 {
     class LoginWindow : public BaseWindow
     {
+        using BaseWindow::BaseWindow;
+        using SignalLoginSuccess = sigc::signal<void()>;
+
       public:
-        explicit LoginWindow(std::function<void()> on_login_success) noexcept
+        explicit LoginWindow() noexcept
           : m_Root(Gtk::Orientation::VERTICAL)
           , m_Card(Gtk::Orientation::VERTICAL)
           , m_ButtonBox(Gtk::Orientation::HORIZONTAL)
-          , m_OnLoginSuccess(std::move(on_login_success))
         {
             InitializeComponents();
+        }
+
+        SignalLoginSuccess& signal_login_success() noexcept
+        {
+            return m_SignalLoginSuccess;
         }
 
         virtual void InitializeComponents() noexcept override
@@ -83,8 +88,8 @@ export namespace Inventory
 
             set_child(m_Root);
 
-            m_LoginButton.signal_clicked().connect(sigc::mem_fun(*this, &LoginWindow::OnLoginButtonClicked));
             m_UserEntry.signal_activate().connect([this]() { m_PasswordEntry.grab_focus(); });
+            m_LoginButton.signal_clicked().connect(sigc::mem_fun(*this, &LoginWindow::OnLoginButtonClicked));
             m_PasswordEntry.signal_activate().connect(sigc::mem_fun(*this, &LoginWindow::OnLoginButtonClicked));
         }
 
@@ -96,11 +101,7 @@ export namespace Inventory
 
             if ( user == "admin" && password == "1234" )
             {
-                if ( m_OnLoginSuccess )
-                {
-                    m_OnLoginSuccess();
-                }
-
+                m_SignalLoginSuccess.emit();
                 return;
             }
 
@@ -116,13 +117,12 @@ export namespace Inventory
             }
 
             m_ErrorDialog = std::make_unique<Gtk::MessageDialog>(*this, "Datos incorrectos", false, Gtk::MessageType::ERROR, Gtk::ButtonsType::OK, true);
-
-            m_ErrorDialog->set_title("Login incorrecto");
+            m_ErrorDialog->set_title("Login Incorrecto");
             m_ErrorDialog->set_secondary_text("El usuario o la contraseña no coinciden.");
             m_ErrorDialog->set_modal(true);
             m_ErrorDialog->set_transient_for(*this);
 
-            m_ErrorDialog->signal_response().connect([this](int) {
+            m_ErrorDialog->signal_response().connect([this](int32_t) {
                 if ( m_ErrorDialog != nullptr )
                 {
                     m_ErrorDialog->hide();
@@ -179,18 +179,19 @@ export namespace Inventory
         }
 
       private:
-        Gtk::Box    m_Root;
-        Gtk::Box    m_Card;
-        Gtk::Box    m_ButtonBox;
         Gtk::Label  m_Title;
         Gtk::Label  m_Subtitle;
         Gtk::Entry  m_UserEntry;
         Gtk::Entry  m_PasswordEntry;
         Gtk::Button m_LoginButton;
+        Gtk::Box    m_Root;
+        Gtk::Box    m_Card;
+        Gtk::Box    m_ButtonBox;
 
-        std::function<void()>               m_OnLoginSuccess;
         std::unique_ptr<Gtk::MessageDialog> m_ErrorDialog;
         Glib::RefPtr<Gtk::CssProvider>      m_CssProvider;
+
+        SignalLoginSuccess m_SignalLoginSuccess;
     };
 }   // namespace Inventory
 
