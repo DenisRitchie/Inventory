@@ -13,28 +13,17 @@ export module Inventory:Application;
 import :MainWindow;
 import :SplashScreen;
 import :LoginWindow;
+import :Helpers;
 
 namespace Inventory
 {
-    [[nodiscard]] std::unique_ptr<char*[]> GetArgv(const std::span<std::string> values) noexcept
-    {
-        const auto size   = values.size();
-        auto       result = std::make_unique<char*[]>(size);
-
-        for ( size_t i = 0; i < size; ++i )
-        {
-            result[i] = const_cast<char*>(values[i].c_str());
-        }
-
-        return result;
-    }
-
-    class Application final : public Gtk::Application
+    export class Application final : public Gtk::Application
     {
       protected:
         Application()
           : Gtk::Application("com.acrosstec.inventory")
         {
+            ApplyGtkTheme(Themes::Orchis::Orchis);
         }
 
         void on_startup() override
@@ -200,12 +189,29 @@ namespace Inventory
         bool     m_ResourcesRegistered { false };
     };
 
+    [[nodiscard]] std::unique_ptr<char*[]> GetArgv(const std::span<std::string> values) noexcept
+    {
+        auto result = std::make_unique<char*[]>(values.size());
+
+        for ( size_t i = 0; i < values.size(); ++i )
+        {
+            result[i] = const_cast<char*>(values[i].c_str());
+        }
+
+        return result;
+    }
+
     export int32_t Main(const std::span<std::string> args) noexcept
     {
+        const auto argv        = GetArgv(args);
+        const auto data_prefix = Win32::GetExecutableDirectory().string();
+
         g_setenv("GTK_CSD", "0", true);
         g_setenv("GDK_BACKEND", "win32", true);
-
-        const auto argv = GetArgv(args);
+        g_setenv("GTK_DATA_PREFIX", data_prefix.c_str(), true);
+        // g_setenv("GTK_THEME", Themes::Orchis::OrchisDark.data(), true);
+        // Muy importante: No fuerces GTK_THEME si quieres cambiar el tema en runtime.
+        g_unsetenv("GTK_THEME");
 
         auto application = Application::Create();
         return application->run(static_cast<int32_t>(args.size()), argv.get());

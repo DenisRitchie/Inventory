@@ -192,6 +192,7 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="SplashScreen.ixx" />
+    <ClCompile Include="Themes.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg-configuration.json" />
@@ -209,6 +210,7 @@
   </ImportGroup>
   <ItemGroup>
     <SplashScreenAssets Include="$(ProjectDir)Assets\Images\**\*.*" />
+    <GtkThemeFiles Include="$(ProjectDir)vcpkg_installed\x64-windows\share\themes\**\*.*" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\Gtk\SplashScreen.gresource.xml" />
@@ -218,5 +220,9 @@
   </ItemGroup>
   <Target Name="CopySplashScreenAssets" AfterTargets="Build">
     <Copy SourceFiles="@(SplashScreenAssets)" DestinationFiles="@(SplashScreenAssets->'$(TargetDir)Assets\Images\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyGtkThemesToOutput" AfterTargets="Build">
+    <Message Importance="High" Text="Copying GTK themes to $(OutDir)share\themes" />
+    <Copy SourceFiles="@(GtkThemeFiles)" DestinationFiles="@(GtkThemeFiles->'$(OutDir)share\themes\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(GtkThemeFiles)' != ''" />
   </Target>
 </Project>

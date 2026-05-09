@@ -71,6 +71,9 @@
     <ClCompile Include="Resources\Gtk\SplashScreen_gresource.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Themes.ixx">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />

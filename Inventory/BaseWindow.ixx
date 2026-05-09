@@ -1,13 +1,15 @@
 module;
 
 #include "Gtkmm.hpp"
+
+#include <string_view>
 #include <filesystem>
 
 export module Inventory:BaseWindow;
 
 import :Helpers;
 
-namespace Inventory
+export namespace Inventory
 {
     class BaseWindow : public Gtk::ApplicationWindow
     {
@@ -65,6 +67,11 @@ namespace Inventory
         void SetRuntimeWindowIcon(const std::filesystem::path& large_icon_path, const std::filesystem::path& small_icon_path) noexcept
         {
             ApplyRuntimeWindowIcon(GetNativeHandle(), large_icon_path, small_icon_path);
+        }
+
+        bool ApplyGtkTheme(const std::string_view& theme_name) noexcept
+        {
+            return Inventory::ApplyGtkTheme(theme_name, this);
         }
 
       protected:

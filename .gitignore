@@ -430,3 +430,4 @@ FodyWeavers.xsd
 
 # Windows VCPKG artifacts
 **/vcpkg_installed
+**/.theme-downloads

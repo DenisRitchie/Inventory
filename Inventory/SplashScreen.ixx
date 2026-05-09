@@ -66,17 +66,14 @@ export namespace Inventory
         void LoadStyles() noexcept
         {
             m_CssProvider = Gtk::CssProvider::create();
-
-            m_CssProvider->load_from_data(
+            m_CssProvider->load_from_string(
                 R"css(
                     window.splash-window {
                         background: transparent;
                     }
-
                     .splash-root {
                         background: transparent;
                     }
-
                     .splash-card {
                         background: #061225;
                         border-radius: 24px;
@@ -85,9 +82,7 @@ export namespace Inventory
                 )css"
             );
 
-            auto display = Gdk::Display::get_default();
-
-            if ( display )
+            if ( auto display = Gdk::Display::get_default(); display )
             {
                 Gtk::StyleContext::add_provider_for_display(display, m_CssProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
             }

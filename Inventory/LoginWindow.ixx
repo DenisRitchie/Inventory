@@ -1,11 +1,14 @@
 module;
 
 #include "Gtkmm.hpp"
+
 #include <memory>
+#include <span>
 
 export module Inventory:LoginWindow;
 
 import :BaseWindow;
+import :Helpers;
 
 export namespace Inventory
 {
@@ -39,8 +42,6 @@ export namespace Inventory
 
             LoadStyles();
 
-            add_css_class("login-window");
-
             m_Root.set_margin_top(32);
             m_Root.set_margin_bottom(32);
             m_Root.set_margin_start(32);
@@ -51,10 +52,6 @@ export namespace Inventory
             m_Card.add_css_class("login-card");
             m_Card.set_size_request(360, -1);
             m_Card.set_spacing(16);
-            m_Card.set_margin_top(24);
-            m_Card.set_margin_bottom(24);
-            m_Card.set_margin_start(24);
-            m_Card.set_margin_end(24);
 
             m_Title.set_text("AcrossTec Inventory");
             m_Title.add_css_class("login-title");
@@ -68,6 +65,7 @@ export namespace Inventory
             m_UserEntry.set_hexpand(true);
 
             m_PasswordEntry.set_placeholder_text("Contraseña");
+            m_PasswordEntry.set_input_purpose(Gtk::InputPurpose::PASSWORD);
             m_PasswordEntry.set_visibility(false);
             m_PasswordEntry.set_hexpand(true);
 
@@ -136,43 +134,24 @@ export namespace Inventory
         void LoadStyles() noexcept
         {
             m_CssProvider = Gtk::CssProvider::create();
-
-            m_CssProvider->load_from_data(
+            m_CssProvider->load_from_string(
                 R"css(
-                    window.login-window {
-                        background: #07111f;
-                    }
-
                     .login-card {
-                        background: #0b1b2f;
+                        padding: 15px;
                         border-radius: 18px;
                         box-shadow: 8px 4px 18px rgba(0, 18, 58, 0.55);
                     }
-
                     .login-title {
                         font-size: 24px;
                         font-weight: 700;
-                        color: #ffffff;
                     }
-
                     .login-subtitle {
                         font-size: 14px;
-                        color: #8fb8d8;
-                    }
-
-                    entry {
-                        min-height: 38px;
-                    }
-
-                    button {
-                        min-height: 40px;
                     }
                 )css"
             );
 
-            auto display = Gdk::Display::get_default();
-
-            if ( display )
+            if ( auto display = Gdk::Display::get_default(); display )
             {
                 Gtk::StyleContext::add_provider_for_display(display, m_CssProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
